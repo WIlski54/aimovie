@@ -90,18 +90,8 @@
 
   /* Fakten */
   h2 { margin: 36px 0 14px; font-size: 22px; color: var(--tinte); }
-  .kacheln { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin: 0; padding: 0; list-style: none; }
-  .kacheln li {
-    background: var(--creme);
-    border: 3px solid #fff;
-    border-radius: 8px;
-    padding: 14px 12px;
-    text-align: center;
-    box-shadow: 0 3px 8px rgba(0,0,0,.18);
-  }
-  .zahl { display: block; font-size: 36px; font-weight: 800; line-height: 1.1; color: var(--koralle-dunkel); }
-  .kacheln li:nth-child(even) .zahl { color: var(--petrol); }
-  .was { display: block; font-size: 14px; }
+  .voraussetzung { margin-top: 36px; text-align: center; font-weight: 600; }
+  .voraussetzung p:last-child { margin-bottom: 0; }
 
   /* Bedienung und Schluss */
   .hinweis {
@@ -142,14 +132,11 @@
     </div>
     <div class="boden" aria-hidden="true"></div>
 
-    <h2>Hinter der Bühne</h2>
-    <ul class="kacheln">
-      <li><span class="zahl">4:00</span><span class="was">Minuten Film</span></li>
-      <li><span class="zahl">12</span><span class="was">Szenen</span></li>
-      <li><span class="zahl">3</span><span class="was">Tonspuren: Stimme, Musik, Geräusche</span></li>
-      <li><span class="zahl">0</span><span class="was">Programmierkenntnisse nötig</span></li>
-      <li><span class="zahl">1</span><span class="was">Idee, im Dialog mit einer KI entstanden</span></li>
-    </ul>
+    <div class="hinweis voraussetzung">
+      <p>Keine zusätzliche Software erforderlich.</p>
+      <p>Keine Programmierkenntnisse notwendig.</p>
+      <p>Es wird keinerlei zusätzliche Software benötigt.</p>
+    </div>
 
     <h2>So bedienst du den Film</h2>
     <div class="hinweis">
