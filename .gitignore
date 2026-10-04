@@ -1,0 +1,4 @@
+docs/
+verify.sh
+.claude/
+*.mp4

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<meta name="description" content="Ein vierminütiges Papiertheater über die Zelle, entstanden im Dialog mit einer KI.">
+<title>Die Zelle als Fabrik</title>
+<style>
+  :root {
+    --creme: #f6ebd3;
+    --kraft: #c9a878;
+    --kraft-dunkel: #a8854f;
+    --koralle: #e8735f;
+    --koralle-dunkel: #c9553f;
+    --senf: #e3a72f;
+    --petrol: #2f6f6b;
+    --tinte: #2b2a33;
+    --holz: #8a5a33;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--kraft);
+    background-image: radial-gradient(circle at 30% 20%, rgba(255,255,255,.18), transparent 55%);
+    color: var(--tinte);
+    font-family: "Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.5;
+  }
+  .wrap { max-width: 960px; margin: 0 auto; padding: 24px 16px 48px; }
+
+  /* Bühne */
+  .rahmen {
+    background: var(--kraft-dunkel);
+    padding: 14px 14px 0;
+    border-radius: 10px 10px 0 0;
+    box-shadow: 0 10px 24px rgba(0,0,0,.25);
+  }
+  .buehne {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--creme);
+    background-image: radial-gradient(ellipse at 50% 40%, #fff8e6, var(--creme) 70%);
+    border-radius: 4px 4px 0 0;
+  }
+  .boden { height: 22px; background: repeating-linear-gradient(90deg, var(--holz) 0 70px, #7a4e2b 70px 72px); }
+  .titelkarte {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 0 22%;
+  }
+  h1 {
+    margin: 0 0 8px;
+    font-family: "Bradley Hand", "Segoe Print", "Comic Sans MS", "Chalkboard SE", cursive;
+    font-size: clamp(30px, 6.4vw, 62px);
+    line-height: 1.1;
+    color: var(--petrol);
+  }
+  .teaser { margin: 0 0 20px; font-size: clamp(14px, 2.2vw, 19px); }
+  .knopf {
+    display: inline-block;
+    padding: 12px 28px;
+    background: var(--koralle);
+    color: #fff;
+    font-weight: 700;
+    font-size: clamp(16px, 2.4vw, 20px);
+    text-decoration: none;
+    border-radius: 999px;
+    border: 3px solid #fff;
+    box-shadow: 0 4px 0 var(--koralle-dunkel), 0 8px 14px rgba(0,0,0,.25);
+    transition: transform .12s ease, box-shadow .12s ease;
+  }
+  .knopf:hover, .knopf:focus-visible { transform: translateY(-2px); box-shadow: 0 6px 0 var(--koralle-dunkel), 0 12px 18px rgba(0,0,0,.28); }
+  .knopf:focus-visible { outline: 3px solid var(--senf); outline-offset: 3px; }
+
+  /* Vorhänge: Grundzustand = geöffnet, die Animation startet geschlossen */
+  .vorhang {
+    position: absolute; top: 0; bottom: 0; width: 20%;
+    background:
+      repeating-linear-gradient(90deg, rgba(0,0,0,.14) 0 6px, rgba(255,255,255,.08) 6px 18px, rgba(0,0,0,0) 18px 26px),
+      var(--koralle);
+    animation: auf 1.8s .5s cubic-bezier(.65,0,.35,1) both;
+  }
+  .vorhang.links  { left: 0;  border-right: 5px solid #fff; border-radius: 0 0 60% 0 / 0 0 14% 0; }
+  .vorhang.rechts { right: 0; border-left: 5px solid #fff;  border-radius: 0 0 0 60% / 0 0 0 14%; }
+  @keyframes auf { from { width: 50.5%; } to { width: 20%; } }
+
+  /* Fakten */
+  h2 { margin: 36px 0 14px; font-size: 22px; color: var(--tinte); }
+  .kacheln { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin: 0; padding: 0; list-style: none; }
+  .kacheln li {
+    background: var(--creme);
+    border: 3px solid #fff;
+    border-radius: 8px;
+    padding: 14px 12px;
+    text-align: center;
+    box-shadow: 0 3px 8px rgba(0,0,0,.18);
+  }
+  .zahl { display: block; font-size: 36px; font-weight: 800; line-height: 1.1; color: var(--koralle-dunkel); }
+  .kacheln li:nth-child(even) .zahl { color: var(--petrol); }
+  .was { display: block; font-size: 14px; }
+
+  /* Bedienung und Schluss */
+  .hinweis {
+    background: var(--creme); border: 3px solid #fff; border-radius: 8px;
+    padding: 14px 16px; box-shadow: 0 3px 8px rgba(0,0,0,.18);
+  }
+  .hinweis p { margin: 0 0 8px; }
+  kbd {
+    display: inline-block; padding: 1px 8px; border-radius: 4px;
+    background: #fff; border: 1px solid var(--kraft-dunkel); border-bottom-width: 3px;
+    font: 600 14px/1.5 ui-monospace, Consolas, monospace;
+  }
+  .schluss {
+    margin: 36px 0 0; text-align: center;
+    font-family: "Bradley Hand", "Segoe Print", "Comic Sans MS", cursive;
+    font-size: clamp(22px, 4vw, 30px); color: var(--petrol);
+  }
+  .schluss small { display: block; margin-top: 4px; font: 14px/1.4 "Segoe UI", system-ui, sans-serif; color: var(--tinte); }
+
+  @media (max-width: 700px) {
+    .buehne { aspect-ratio: auto; height: 420px; }
+    .titelkarte { padding: 0 15%; }
+    .vorhang { width: 11%; }
+    @keyframes auf { from { width: 50.5%; } to { width: 11%; } }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .vorhang { animation: none; }
+    .knopf { transition: none; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <main>
+    <div class="rahmen">
+      <div class="buehne">
+        <div class="titelkarte">
+          <h1>Die Zelle als Fabrik</h1>
+          <p class="teaser">Ein Papiertheater für vier Minuten Staunen.<br>Gemacht in einem Bruchteil der Zeit, die es sonst braucht.</p>
+          <a class="knopf" href="Zelle_als_Fabrik.html">Vorhang auf</a>
+        </div>
+        <div class="vorhang links" aria-hidden="true"></div>
+        <div class="vorhang rechts" aria-hidden="true"></div>
+      </div>
+    </div>
+    <div class="boden" aria-hidden="true"></div>
+
+    <h2>Hinter der Bühne</h2>
+    <ul class="kacheln">
+      <li><span class="zahl">4:00</span><span class="was">Minuten Film</span></li>
+      <li><span class="zahl">12</span><span class="was">Szenen</span></li>
+      <li><span class="zahl">3</span><span class="was">Tonspuren: Stimme, Musik, Geräusche</span></li>
+      <li><span class="zahl">0</span><span class="was">Programmierkenntnisse nötig</span></li>
+      <li><span class="zahl">1</span><span class="was">Idee, im Dialog mit einer KI entstanden</span></li>
+    </ul>
+
+    <h2>So bedienst du den Film</h2>
+    <div class="hinweis">
+      <p><kbd>Leertaste</kbd> Start und Pause &nbsp; <kbd>←</kbd> <kbd>→</kbd> Szene zurück und vor</p>
+      <p><kbd>F</kbd> Vollbild &nbsp; <kbd>U</kbd> Untertitel &nbsp; <kbd>P</kbd> Unterrichtsmodus (hält nach jeder Szene an)</p>
+      <p>Das Menü ☰ springt direkt zu einer Szene. Der Ton startet erst, wenn du im Film auf Start klickst.</p>
+    </div>
+
+    <p class="schluss">Neugierig geworden? Sprich mich an.<small>Stephan Wilski</small></p>
+  </main>
+</div>
+</body>
+</html>
